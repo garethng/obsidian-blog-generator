@@ -1,6 +1,7 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, WorkspaceLeaf, TFile } from 'obsidian';
+import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, WorkspaceLeaf, TFile, TFolder } from 'obsidian';
 import OpenAI from 'openai';
 import { translations, Translations } from './i18n';
+import * as path from 'path';
 
 interface BlogGeneratorSettings {
     apiKey: string;
@@ -167,7 +168,7 @@ export default class BlogGeneratorPlugin extends Plugin {
                 images.push(imagePath);
                 
                 // Get base64 encoding of the image
-                const base64 = await this.processImage(imagePath);
+                const base64 = await this.processImage(imagePath, view.file as TFile);
                 if (base64) {
                     imageBase64Map.set(imagePath, base64);
                 }
@@ -263,32 +264,75 @@ export default class BlogGeneratorPlugin extends Plugin {
         await this.saveData(this.settings);
     }
 
-    async processImage(imagePath: string): Promise<string> {
+    async processImage(imagePath: string, file: TFile): Promise<string> {
         try {
-            // Get image file
-            const file = this.app.vault.getAbstractFileByPath(imagePath);
-            if (!(file instanceof TFile)) {
-                console.warn(this.t('IMAGE_NOT_FOUND'), imagePath);
+            // Get the parent folder of the current note
+            const parentFolder = file.parent;
+            
+            // Try to find the image file recursively
+            const imageFile = await this.findImageInFolder(imagePath, parentFolder);
+            
+            if (!imageFile) {
+                new Notice(this.t('IMAGE_NOT_FOUND') + `: ${imagePath}`);
                 return '';
             }
 
-            // Read image file
-            const arrayBuffer = await this.app.vault.readBinary(file);
-            const blob = new Blob([arrayBuffer]);
+            // Read the image file
+            const imageBuffer = await this.app.vault.readBinary(imageFile);
             
             // Convert to base64
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    const base64data = reader.result as string;
-                    resolve(base64data);
-                };
-                reader.readAsDataURL(blob);
-            });
+            const base64Image = Buffer.from(imageBuffer).toString('base64');
+            const mimeType = this.getMimeType(imagePath);
+            
+            return `data:${mimeType};base64,${base64Image}`;
         } catch (error) {
-            console.error(`${this.t('IMAGE_PROCESSING_ERROR')}: ${imagePath}`, error);
+            console.error('Error processing image:', error);
+            new Notice(this.t('IMAGE_PROCESSING_ERROR'));
             return '';
         }
+    }
+
+    private async findImageInFolder(imageName: string, folder: TFolder | null): Promise<TFile | null> {
+        if (!folder) return null;
+        
+        // First, try to find in current folder
+        const files = folder.children;
+        for (const file of files) {
+            if (file instanceof TFile) {
+                // Check if the file name matches (case insensitive)
+                if (file.name.toLowerCase() === imageName.toLowerCase()) {
+                    return file;
+                }
+            }
+        }
+        
+        // Then recursively search in subfolders
+        for (const file of files) {
+            if (file instanceof TFolder) {
+                const found = await this.findImageInFolder(imageName, file);
+                if (found) return found;
+            }
+        }
+        
+        // If not found in current folder and subfolders, try parent folder
+        if (folder.parent) {
+            return this.findImageInFolder(imageName, folder.parent);
+        }
+        
+        return null;
+    }
+
+    private getMimeType(filePath: string): string {
+        const ext = path.extname(filePath).toLowerCase();
+        const mimeTypes: { [key: string]: string } = {
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.png': 'image/png',
+            '.gif': 'image/gif',
+            '.webp': 'image/webp',
+            '.svg': 'image/svg+xml'
+        };
+        return mimeTypes[ext] || 'application/octet-stream';
     }
 }
 
