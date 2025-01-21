@@ -4,7 +4,12 @@ on:
   push:
     tags:
       - "*"
-
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g. 1.0.0)'
+        required: true
+        type: string
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,7 +26,9 @@ jobs:
         run: |
           npm install
           npm run build
-
+          mv .build/main.js main.js
+          mv .build/manifest.json manifest.json
+          mv .build/styles.css styles.css
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
