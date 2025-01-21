@@ -87,3 +87,7 @@ yarn dev
 - Ensure you have configured a valid OpenAI API key before use
 - Image processing may take some time depending on size and quantity
 - Review your note content before generation to ensure proper formatting 
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details. 
