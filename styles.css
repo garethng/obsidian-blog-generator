@@ -1,0 +1,53 @@
+/* Blog Generator Plugin Styles */
+
+.blog-generator-settings {
+    padding: 10px;
+}
+
+.blog-generator-settings .setting-item {
+    margin-bottom: 15px;
+}
+
+.blog-generator-notice {
+    padding: 8px;
+    margin: 8px 0;
+    border-radius: 4px;
+    background-color: var(--background-modifier-success);
+}
+
+.blog-generator-error {
+    padding: 8px;
+    margin: 8px 0;
+    border-radius: 4px;
+    background-color: var(--background-modifier-error);
+}
+
+/* Sidebar Styles */
+.blog-generator-view h4 {
+    margin: 10px 20px;
+    color: var(--text-normal);
+}
+
+.blog-generator-buttons {
+    padding: 10px 20px;
+}
+
+.blog-generator-buttons button {
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 8px;
+    background-color: var(--interactive-accent);
+    color: var(--text-on-accent);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.blog-generator-buttons button:hover {
+    background-color: var(--interactive-accent-hover);
+}
+
+.blog-generator-buttons button:active {
+    transform: translateY(1px);
+} 
