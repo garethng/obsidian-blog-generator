@@ -22,5 +22,5 @@
   },
   "include": [
     "src/**/*.ts"
-, "i18n.ts", "main.ts"  ]
+, "src/i18n.ts", "src/main.ts"  ]
 } 
