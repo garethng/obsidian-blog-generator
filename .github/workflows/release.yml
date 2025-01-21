@@ -26,12 +26,10 @@ jobs:
           mv .build/styles.css styles.css
       
       - name: Create release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          tag="${GITHUB_REF#refs/tags/}"
-          gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
-          gh release create "$tag" \
-            --title="$tag" \
-            --draft \
-            main.js manifest.json styles.css
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            main.js
+            manifest.json
+            styles.css
