@@ -50,7 +50,7 @@ Blog Generator for Obsidian is a powerful plugin that transforms your Obsidian n
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/obsidian-blog-generator.git
+git clone https://github.com/garethng/obsidian-blog-generator.git
 cd obsidian-blog-generator
 ```
 
@@ -81,39 +81,6 @@ yarn dev
 2. Create `.obsidian/plugins/obsidian-blog-generator/` directory
 3. Copy the built files (main.js, manifest.json, styles.css) to this directory
 4. Enable the plugin in Obsidian settings
-
-### Publishing to Obsidian Plugin Store
-
-1. Update `manifest.json` with your plugin information
-2. Create a new release on GitHub:
-   - Tag version should match the version in `manifest.json`
-   - Name the release with the version number
-   - Generate release notes
-3. Submit your plugin to the Obsidian Plugin Store:
-   - Go to [Obsidian Plugin Store Submission](https://github.com/obsidianmd/obsidian-releases)
-   - Fork the repository
-   - Add your plugin information to `community-plugins.json`
-   - Create a pull request
-4. Wait for review and approval from the Obsidian team
-
-#### Requirements for Plugin Store Submission
-
-- A clear README with documentation
-- Source code must be publicly available
-- Plugin must follow Obsidian's guidelines and best practices
-- Manifest must include all required fields:
-  ```json
-  {
-    "id": "obsidian-blog-generator",
-    "name": "Blog Generator",
-    "version": "1.0.0",
-    "minAppVersion": "0.15.0",
-    "description": "Generate blog posts from your notes using OpenAI",
-    "author": "Your Name",
-    "authorUrl": "https://github.com/yourusername",
-    "isDesktopOnly": false
-  }
-  ```
 
 ## Notes
 

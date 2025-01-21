@@ -179,26 +179,33 @@ export default class BlogGeneratorPlugin extends Plugin {
             // Build description with base64 images
             const imageDescriptions = images.map(img => {
                 const base64 = imageBase64Map.get(img);
+                // Only include a short preview of base64 data to avoid token limit
                 return base64 
-                    ? `Image: ${img}\nData: ${base64}`
+                    ? `Image: ${img}\nFormat: ${base64.split(';')[0]}`
                     : `Image: ${img} (unreadable)`;
             }).join('\n\n');
 
             let prompt = '';
+            let systemPrompt = '';
             if (this.settings.useCustomPrompt && this.settings.customPrompt) {
                 // Use custom prompt
                 prompt = this.settings.customPrompt
                     .replace('{content}', noteContent)
                     .replace('{images}', imageDescriptions);
+                systemPrompt = this.t('SYSTEM_PROMPT');
             } else {
-                // Use default prompt
-                prompt = `${this.t('DEFAULT_PROMPT')}
+                // Use default prompt based on selected language
+                const langPrompts = translations[this.settings.language] || translations['en'];
+                prompt = `${langPrompts.DEFAULT_PROMPT}
                 
                 Original note content:
                 ${noteContent}
                 
                 Images in note:
-                ${imageDescriptions}`;
+                ${images.map(img => `Image: ${img}`).join('\n')}`;
+
+                // Use system prompt based on selected language
+                systemPrompt = langPrompts.SYSTEM_PROMPT;
             }
 
             console.log(this.t('CALLING_API'));
@@ -208,7 +215,7 @@ export default class BlogGeneratorPlugin extends Plugin {
                 messages: [
                     {
                         role: "system",
-                        content: this.t('SYSTEM_PROMPT')
+                        content: systemPrompt
                     },
                     {
                         role: "user",
@@ -226,8 +233,20 @@ export default class BlogGeneratorPlugin extends Plugin {
             images.forEach(img => {
                 const base64 = imageBase64Map.get(img);
                 if (base64) {
-                    const imgRegex = new RegExp(`!\\[\\[${img.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\]\\]`, 'g');
-                    generatedBlog = generatedBlog.replace(imgRegex, `<img src="${base64}" alt="${img}" />`);
+                    // Escape special characters in the image path for regex
+                    const escapedImg = img.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    // Match both ![[image]] and ![description](image) formats
+                    const wikiRegex = new RegExp(`!\\[\\[${escapedImg}\\]\\]`, 'g');
+                    const markdownRegex = new RegExp(`!\\[([^\\]]*)\\]\\(${escapedImg}\\)`, 'g');
+                    
+                    // Only add base64 data if it's a complete data URL
+                    const imgTag = base64.startsWith('data:') 
+                        ? `<img src="${base64}" alt="${img}" />`
+                        : `![${img}](${img})`;  // Keep original markdown format if image was too large
+                    
+                    generatedBlog = generatedBlog
+                        .replace(wikiRegex, imgTag)
+                        .replace(markdownRegex, (_, alt) => `<img src="${base64}" alt="${alt || img}" />`);
                 }
             });
 
@@ -282,7 +301,13 @@ export default class BlogGeneratorPlugin extends Plugin {
             
             // Convert to base64
             const base64Image = Buffer.from(imageBuffer).toString('base64');
-            const mimeType = this.getMimeType(imagePath);
+            const mimeType = this.getMimeType(imageFile.extension);
+            
+            // Check if image size is too large (over 50KB)
+            if (base64Image.length > 50 * 1024) {
+                console.log(`Image ${imagePath} is too large (${Math.round(base64Image.length / 1024)}KB), skipping base64 data in prompt`);
+                return `${mimeType}`;
+            }
             
             return `data:${mimeType};base64,${base64Image}`;
         } catch (error) {
@@ -322,17 +347,19 @@ export default class BlogGeneratorPlugin extends Plugin {
         return null;
     }
 
-    private getMimeType(filePath: string): string {
-        const ext = path.extname(filePath).toLowerCase();
+    private getMimeType(extension: string): string {
         const mimeTypes: { [key: string]: string } = {
-            '.jpg': 'image/jpeg',
-            '.jpeg': 'image/jpeg',
-            '.png': 'image/png',
-            '.gif': 'image/gif',
-            '.webp': 'image/webp',
-            '.svg': 'image/svg+xml'
+            'jpg': 'image/jpeg',
+            'jpeg': 'image/jpeg',
+            'png': 'image/png',
+            'gif': 'image/gif',
+            'webp': 'image/webp',
+            'svg': 'image/svg+xml',
+            'bmp': 'image/bmp',
+            'tiff': 'image/tiff',
+            'ico': 'image/x-icon'
         };
-        return mimeTypes[ext] || 'application/octet-stream';
+        return mimeTypes[extension.toLowerCase()] || 'application/octet-stream';
     }
 }
 
