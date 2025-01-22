@@ -142,6 +142,11 @@ export default class BlogGeneratorPlugin extends Plugin {
         const noteContent = editor.getValue();
         
         try {
+            if (!view.file || !(view.file instanceof TFile)) {
+                new Notice(this.t('PLEASE_OPEN_NOTE'));
+                return;
+            }
+
             // Check if API key is set
             if (!this.settings.apiKey) {
                 new Notice(this.t('API_KEY_REQUIRED'));
@@ -168,7 +173,7 @@ export default class BlogGeneratorPlugin extends Plugin {
                 images.push(imagePath);
                 
                 // Get base64 encoding of the image
-                const base64 = await this.processImage(imagePath, view.file as TFile);
+                const base64 = await this.processImage(imagePath, view.file);
                 if (base64) {
                     imageBase64Map.set(imagePath, base64);
                 }
