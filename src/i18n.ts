@@ -47,9 +47,9 @@ export interface Translations {
 export const translations: Translations = {
     en: {
         // UI elements
-        BLOG_GENERATOR: "Blog Generator",
-        GENERATE_BLOG: "Generate Blog",
-        GENERATE_BLOG_ARTICLE: "Generate Blog Article",
+        BLOG_GENERATOR: "Blog generator",
+        GENERATE_BLOG: "Generate blog",
+        GENERATE_BLOG_ARTICLE: "Generate blog article",
         PLEASE_OPEN_NOTE: "Please open a note first",
         GENERATING_BLOG: "Generating blog...",
         BLOG_GENERATION_SUCCESS: "Blog generated successfully!",
@@ -57,19 +57,19 @@ export const translations: Translations = {
         CHECK_CONSOLE: "Please check console for details",
         
         // Settings
-        API_BASE_URL: "API Base URL",
-        API_BASE_URL_DESC: "Enter your API Base URL (default is https://api.openai.com/v1)",
-        API_KEY: "OpenAI API Key",
+        API_BASE_URL: "API base URL",
+        API_BASE_URL_DESC: "Enter your API base URL (default is https://api.openai.com/v1)",
+        API_KEY: "OpenAI API key",
         API_KEY_DESC: "Enter your OpenAI API key",
-        MODEL: "OpenAI Model",
+        MODEL: "OpenAI model",
         MODEL_DESC: "Choose the OpenAI model to use",
         LANGUAGE: "Language",
         LANGUAGE_DESC: "Choose the language for generated blog",
-        CUSTOM_PROMPT: "Custom Prompt",
+        CUSTOM_PROMPT: "Custom prompt",
         CUSTOM_PROMPT_DESC: "Enter your custom prompt for blog generation. Use {content} for note content and {images} for image descriptions",
-        USE_CUSTOM_PROMPT: "Use Custom Prompt",
+        USE_CUSTOM_PROMPT: "Use custom prompt",
         USE_CUSTOM_PROMPT_DESC: "Enable to use custom prompt instead of default prompt",
-        UI_LANGUAGE: "UI Language",
+        UI_LANGUAGE: "UI language",
         UI_LANGUAGE_DESC: "Choose the language for user interface",
         
         // Prompts
@@ -100,12 +100,12 @@ export const translations: Translations = {
         CHECK_CONSOLE: "请检查控制台获取详细信息",
         
         // Settings
-        API_BASE_URL: "API Base URL",
-        API_BASE_URL_DESC: "输入你的 API Base URL（默认为 https://api.openai.com/v1）",
-        API_KEY: "OpenAI API Key",
-        API_KEY_DESC: "输入你的OpenAI API密钥",
+        API_BASE_URL: "API 接口地址",
+        API_BASE_URL_DESC: "输入你的 API 接口地址（默认为 https://api.openai.com/v1）",
+        API_KEY: "OpenAI API 密钥",
+        API_KEY_DESC: "输入你的 OpenAI API 密钥",
         MODEL: "OpenAI 模型",
-        MODEL_DESC: "选择要使用的OpenAI模型",
+        MODEL_DESC: "选择要使用的 OpenAI 模型",
         LANGUAGE: "语言",
         LANGUAGE_DESC: "选择生成博客的语言",
         CUSTOM_PROMPT: "自定义提示词",
@@ -120,15 +120,15 @@ export const translations: Translations = {
         SYSTEM_PROMPT: "你是一位专业的博客写手。用中文写作。",
         
         // Error messages
-        API_KEY_REQUIRED: "请先在设置中配置OpenAI API密钥",
+        API_KEY_REQUIRED: "请先在设置中配置 OpenAI API 密钥",
         IMAGE_NOT_FOUND: "找不到图片文件",
         IMAGE_PROCESSING_ERROR: "处理图片时出错",
         
         // Console messages
-        FOUND_IMAGES: "找到图片引用:",
+        FOUND_IMAGES: "找到图片引用：",
         CALLING_API: "开始调用 OpenAI API...",
         API_CALL_SUCCESS: "API 调用成功，开始保存文件...",
-        SAVING_FILE: "保存到文件:",
+        SAVING_FILE: "保存到文件：",
         BLOG_GENERATION_COMPLETE: "博客生成完成"
     },
     ja: {
@@ -143,12 +143,12 @@ export const translations: Translations = {
         CHECK_CONSOLE: "詳細はコンソールを確認してください",
         
         // Settings
-        API_BASE_URL: "API Base URL",
-        API_BASE_URL_DESC: "API Base URLを入力してください（デフォルトは https://api.openai.com/v1）",
-        API_KEY: "OpenAI API Key",
-        API_KEY_DESC: "OpenAI APIキーを入力してください",
+        API_BASE_URL: "API エンドポイント",
+        API_BASE_URL_DESC: "API エンドポイントを入力してください（デフォルトは https://api.openai.com/v1）",
+        API_KEY: "OpenAI API キー",
+        API_KEY_DESC: "OpenAI API キーを入力してください",
         MODEL: "OpenAI モデル",
-        MODEL_DESC: "使用するOpenAIモデルを選択してください",
+        MODEL_DESC: "使用する OpenAI モデルを選択してください",
         LANGUAGE: "言語",
         LANGUAGE_DESC: "生成するブログの言語を選択してください",
         CUSTOM_PROMPT: "カスタムプロンプト",
@@ -156,22 +156,22 @@ export const translations: Translations = {
         USE_CUSTOM_PROMPT: "カスタムプロンプトを使用",
         USE_CUSTOM_PROMPT_DESC: "有効にするとデフォルトプロンプトの代わりにカスタムプロンプトを使用します",
         UI_LANGUAGE: "インターフェース言語",
-        UI_LANGUAGE_DESC: "ユーザーインターフェースの言語を選択",
+        UI_LANGUAGE_DESC: "ユーザーインターフェースの言語を選択してください",
         
         // Prompts
         DEFAULT_PROMPT: "以下のノート内容に基づいて、構造的で明確なブログ記事を生成してください。元のテキストの主要なポイントを維持しながら、ブログ形式により適した形に調整してください。出力は日本語でmarkdown形式とし、画像やその他のコンテンツは含めず、ブログ本文のみとしてください。",
         SYSTEM_PROMPT: "あなたはプロのブログライターです。日本語で書いてください。",
         
         // Error messages
-        API_KEY_REQUIRED: "最初に設定でOpenAI APIキーを設定してください",
+        API_KEY_REQUIRED: "最初に設定で OpenAI API キーを設定してください",
         IMAGE_NOT_FOUND: "画像が見つかりません",
         IMAGE_PROCESSING_ERROR: "画像の処理中にエラーが発生しました",
         
         // Console messages
-        FOUND_IMAGES: "画像の参照を見つけました:",
-        CALLING_API: "OpenAI APIを呼び出し中...",
-        API_CALL_SUCCESS: "API呼び出しが成功しました。ファイルを保存中...",
-        SAVING_FILE: "ファイルに保存中:",
+        FOUND_IMAGES: "画像の参照を見つけました：",
+        CALLING_API: "OpenAI API を呼び出し中...",
+        API_CALL_SUCCESS: "API 呼び出しが成功しました。ファイルを保存中...",
+        SAVING_FILE: "ファイルに保存中：",
         BLOG_GENERATION_COMPLETE: "ブログの生成が完了しました"
     },
     ko: {
@@ -186,9 +186,9 @@ export const translations: Translations = {
         CHECK_CONSOLE: "자세한 내용은 콘솔을 확인해주세요",
         
         // Settings
-        API_BASE_URL: "API Base URL",
-        API_BASE_URL_DESC: "API Base URL을 입력하세요 (기본값은 https://api.openai.com/v1)",
-        API_KEY: "OpenAI API Key",
+        API_BASE_URL: "API 엔드포인트",
+        API_BASE_URL_DESC: "API 엔드포인트를 입력하세요 (기본값은 https://api.openai.com/v1)",
+        API_KEY: "OpenAI API 키",
         API_KEY_DESC: "OpenAI API 키를 입력하세요",
         MODEL: "OpenAI 모델",
         MODEL_DESC: "사용할 OpenAI 모델을 선택하세요",
@@ -199,7 +199,7 @@ export const translations: Translations = {
         USE_CUSTOM_PROMPT: "사용자 정의 프롬프트 사용",
         USE_CUSTOM_PROMPT_DESC: "활성화하면 기본 프롬프트 대신 사용자 정의 프롬프트를 사용합니다",
         UI_LANGUAGE: "인터페이스 언어",
-        UI_LANGUAGE_DESC: "사용자 인터페이스 언어 선택",
+        UI_LANGUAGE_DESC: "사용자 인터페이스 언어를 선택하세요",
         
         // Prompts
         DEFAULT_PROMPT: "다음 노트 내용을 바탕으로 구조적이고 명확한 블로그 포스트를 생성해주세요. 원문의 주요 포인트를 유지하면서 블로그 형식에 더 적합하게 만들어주세요. 출력은 한국어로 markdown 형식을 사용하며, 이미지와 기타 콘텐츠를 제외한 블로그 내용만 포함해주세요.",
@@ -211,10 +211,10 @@ export const translations: Translations = {
         IMAGE_PROCESSING_ERROR: "이미지 처리 중 오류 발생",
         
         // Console messages
-        FOUND_IMAGES: "이미지 참조를 찾았습니다:",
+        FOUND_IMAGES: "이미지 참조를 찾았습니다：",
         CALLING_API: "OpenAI API 호출 중...",
         API_CALL_SUCCESS: "API 호출 성공, 파일 저장 중...",
-        SAVING_FILE: "파일 저장 중:",
+        SAVING_FILE: "파일 저장 중：",
         BLOG_GENERATION_COMPLETE: "블로그 생성 완료"
     }
 }; 

@@ -1,10 +1,10 @@
-# Obsidian 블로그 생성기
+# 블로그 생성기
 
 [English](README.md) | [简体中文](README_zh-CN.md) | [日本語](README_ja.md)
 
 ## 소개
 
-Obsidian 블로그 생성기는 Obsidian 노트를 구조화된 블로그 포스트로 쉽게 변환할 수 있는 강력한 플러그인입니다. OpenAI의 언어 모델을 사용하여 콘텐츠를 최적화하고, 다국어 출력을 지원하며, 노트 내의 이미지도 처리할 수 있습니다.
+블로그 생성기 Obsidian 노트를 구조화된 블로그 포스트로 쉽게 변환할 수 있는 강력한 플러그인입니다. OpenAI의 언어 모델을 사용하여 콘텐츠를 최적화하고, 다국어 출력을 지원하며, 노트 내의 이미지도 처리할 수 있습니다.
 
 ## 특징
 
@@ -106,7 +106,7 @@ yarn dev
   {
     "id": "obsidian-blog-generator",
     "name": "Blog Generator",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "minAppVersion": "0.15.0",
     "description": "Generate blog posts from your notes using OpenAI",
     "author": "당신의 이름",

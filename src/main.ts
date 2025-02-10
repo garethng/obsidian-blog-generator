@@ -69,6 +69,13 @@ class BlogGeneratorView extends MarkdownView {
 export default class BlogGeneratorPlugin extends Plugin {
     settings: BlogGeneratorSettings;
     apiBaseUrl: string;
+    private readonly DEBUG = process.env.NODE_ENV !== 'production';
+
+    private debug(...args: any[]) {
+        if (this.DEBUG) {
+            console.log('[Blog Generator]', ...args);
+        }
+    }
 
     t(key: keyof Translations['en']): string {
         return translations[this.settings.uiLanguage][key];
@@ -133,8 +140,7 @@ export default class BlogGeneratorPlugin extends Plugin {
     }
 
     async onunload() {
-        // Clean up views
-        this.app.workspace.getLeavesOfType(VIEW_TYPE_BLOG_GENERATOR).forEach(leaf => leaf.detach());
+        // Clean up code if needed
     }
 
     // Blog generation logic
@@ -161,25 +167,27 @@ export default class BlogGeneratorPlugin extends Plugin {
 
             new Notice(this.t('GENERATING_BLOG'));
 
-            // Extract image references
-            const imageRegex = /!\[\[(.*?)\]\]/g;
-            const imageMatches = noteContent.matchAll(imageRegex);
-            const images = [];
+            // Get image embeds from metadata cache
+            const fileCache = this.app.metadataCache.getFileCache(view.file);
+            const embeds = fileCache?.embeds || [];
             const imageBase64Map = new Map<string, string>();
 
-            // Process all images
-            for (const match of imageMatches) {
-                const imagePath = match[1].split('|')[0].trim(); // Handle possible aliases
-                images.push(imagePath);
-                
-                // Get base64 encoding of the image
-                const base64 = await this.processImage(imagePath, view.file);
-                if (base64) {
-                    imageBase64Map.set(imagePath, base64);
+            // Process image embeds
+            for (const embed of embeds) {
+                const ext = embed.link.split('.').pop()?.toLowerCase();
+                if (ext && ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'bmp', 'tiff'].includes(ext)) {
+                    const imageFile = this.app.vault.getAbstractFileByPath(embed.link);
+                    if (imageFile instanceof TFile) {
+                        const base64 = await this.processImage(imageFile);
+                        if (base64) {
+                            imageBase64Map.set(embed.link, base64);
+                        }
+                    }
                 }
             }
 
-            console.log(this.t('FOUND_IMAGES'), images.length);
+            const images = Array.from(imageBase64Map.keys());
+            this.debug(this.t('FOUND_IMAGES'), images.length);
 
             // Build description with base64 images
             const imageDescriptions = images.map(img => {
@@ -213,7 +221,7 @@ export default class BlogGeneratorPlugin extends Plugin {
                 systemPrompt = langPrompts.SYSTEM_PROMPT;
             }
 
-            console.log(this.t('CALLING_API'));
+            this.debug('Starting API call...');
             
             const completion = await openai.chat.completions.create({
                 model: this.settings.model,
@@ -230,7 +238,7 @@ export default class BlogGeneratorPlugin extends Plugin {
                 temperature: 0.7,
             });
 
-            console.log(this.t('API_CALL_SUCCESS'));
+            this.debug('API call completed');
 
             let generatedBlog = completion.choices[0].message.content || '';
 
@@ -263,15 +271,15 @@ export default class BlogGeneratorPlugin extends Plugin {
                 fileName = `generated-blog-${Date.now()}`;
             }
             
-            console.log(this.t('SAVING_FILE'), fileName);
+            this.debug(this.t('SAVING_FILE'), fileName);
             
             await this.app.vault.create(`${fileName}.md`, generatedBlog);
             
             new Notice(this.t('BLOG_GENERATION_SUCCESS'));
-            console.log(this.t('BLOG_GENERATION_COMPLETE'));
+            this.debug(this.t('BLOG_GENERATION_COMPLETE'));
         } catch (error) {
-            console.error(this.t('BLOG_GENERATION_ERROR'), error);
-            console.error('Error details:', {
+            this.debug(this.t('BLOG_GENERATION_ERROR'), error);
+            this.debug('Error details:', {
                 message: error.message,
                 status: error.status,
                 response: error.response
@@ -288,19 +296,8 @@ export default class BlogGeneratorPlugin extends Plugin {
         await this.saveData(this.settings);
     }
 
-    async processImage(imagePath: string, file: TFile): Promise<string> {
+    async processImage(imageFile: TFile): Promise<string> {
         try {
-            // Get the parent folder of the current note
-            const parentFolder = file.parent;
-            
-            // Try to find the image file recursively
-            const imageFile = await this.findImageInFolder(imagePath, parentFolder);
-            
-            if (!imageFile) {
-                new Notice(this.t('IMAGE_NOT_FOUND') + `: ${imagePath}`);
-                return '';
-            }
-
             // Read the image file
             const imageBuffer = await this.app.vault.readBinary(imageFile);
             
@@ -310,46 +307,16 @@ export default class BlogGeneratorPlugin extends Plugin {
             
             // Check if image size is too large (over 50KB)
             if (base64Image.length > 50 * 1024) {
-                console.log(`Image ${imagePath} is too large (${Math.round(base64Image.length / 1024)}KB), skipping base64 data in prompt`);
+                this.debug(`Image ${imageFile.path} is too large (${Math.round(base64Image.length / 1024)}KB), skipping base64 data in prompt`);
                 return `${mimeType}`;
             }
             
             return `data:${mimeType};base64,${base64Image}`;
         } catch (error) {
-            console.error('Error processing image:', error);
+            this.debug('Error processing image:', error);
             new Notice(this.t('IMAGE_PROCESSING_ERROR'));
             return '';
         }
-    }
-
-    private async findImageInFolder(imageName: string, folder: TFolder | null): Promise<TFile | null> {
-        if (!folder) return null;
-        
-        // First, try to find in current folder
-        const files = folder.children;
-        for (const file of files) {
-            if (file instanceof TFile) {
-                // Check if the file name matches (case insensitive)
-                if (file.name.toLowerCase() === imageName.toLowerCase()) {
-                    return file;
-                }
-            }
-        }
-        
-        // Then recursively search in subfolders
-        for (const file of files) {
-            if (file instanceof TFolder) {
-                const found = await this.findImageInFolder(imageName, file);
-                if (found) return found;
-            }
-        }
-        
-        // If not found in current folder and subfolders, try parent folder
-        if (folder.parent) {
-            return this.findImageInFolder(imageName, folder.parent);
-        }
-        
-        return null;
     }
 
     private getMimeType(extension: string): string {
@@ -387,8 +354,13 @@ class BlogGeneratorSettingTab extends PluginSettingTab {
                 .setPlaceholder('https://api.openai.com/v1')
                 .setValue(this.plugin.settings.apiBaseUrl)
                 .onChange(async (value) => {
-                    this.plugin.settings.apiBaseUrl = value;
-                    await this.plugin.saveSettings();
+                    try {
+                        new URL(value); // Validate URL format
+                        this.plugin.settings.apiBaseUrl = value;
+                        await this.plugin.saveSettings();
+                    } catch (e) {
+                        new Notice('Please enter a valid URL');
+                    }
                 }));
 
         new Setting(containerEl)
@@ -443,7 +415,7 @@ class BlogGeneratorSettingTab extends PluginSettingTab {
                     this.display();
                 }));
 
-        new Setting(containerEl)
+        const useCustomPromptSetting = new Setting(containerEl)
             .setName(this.plugin.t('USE_CUSTOM_PROMPT'))
             .setDesc(this.plugin.t('USE_CUSTOM_PROMPT_DESC'))
             .addToggle(toggle => toggle
@@ -451,19 +423,24 @@ class BlogGeneratorSettingTab extends PluginSettingTab {
                 .onChange(async (value) => {
                     this.plugin.settings.useCustomPrompt = value;
                     await this.plugin.saveSettings();
+                    // Refresh the settings tab to show/hide custom prompt setting
+                    this.display();
                 }));
 
-        new Setting(containerEl)
-            .setName(this.plugin.t('CUSTOM_PROMPT'))
-            .setDesc(this.plugin.t('CUSTOM_PROMPT_DESC'))
-            .addTextArea(text => {
-                text.inputEl.rows = 6;
-                text.inputEl.cols = 50;
-                text.setValue(this.plugin.settings.customPrompt)
-                text.onChange(async (value) => {
-                    this.plugin.settings.customPrompt = value;
-                    await this.plugin.saveSettings();
+        // Only show custom prompt setting if useCustomPrompt is enabled
+        if (this.plugin.settings.useCustomPrompt) {
+            new Setting(containerEl)
+                .setName(this.plugin.t('CUSTOM_PROMPT'))
+                .setDesc(this.plugin.t('CUSTOM_PROMPT_DESC'))
+                .addTextArea(text => {
+                    text.inputEl.rows = 6;
+                    text.inputEl.cols = 50;
+                    text.setValue(this.plugin.settings.customPrompt)
+                    text.onChange(async (value) => {
+                        this.plugin.settings.customPrompt = value;
+                        await this.plugin.saveSettings();
+                    });
                 });
-            });
+        }
     }
 } 

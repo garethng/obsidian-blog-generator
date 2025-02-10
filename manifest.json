@@ -1,9 +1,9 @@
 {
   "id": "ai-blog-generator",
   "name": "Blog AI Generator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "minAppVersion": "0.15.0",
   "description": "Generate blog posts from your notes using OpenAI api",
   "author": "Gareth Ng",
-  "isDesktopOnly": false
+  "isDesktopOnly": true
 } 

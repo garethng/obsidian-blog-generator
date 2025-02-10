@@ -1,10 +1,10 @@
-# Blog Generator for Obsidian
+# Blog Generator
 
 [简体中文](README_zh-CN.md) | [日本語](README_ja.md) | [한국어](README_ko.md)
 
 ## Introduction
 
-Blog Generator for Obsidian is a powerful plugin that transforms your Obsidian notes into well-structured blog posts. It leverages OpenAI's language models to optimize content, supports multiple languages, and handles images within your notes.
+Blog Generator is a powerful plugin that transforms your Obsidian notes into well-structured blog posts. It leverages OpenAI's language models to optimize content, supports multiple languages, and handles images within your notes.
 
 ## Features
 

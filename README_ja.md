@@ -1,10 +1,10 @@
-# Obsidian ブログジェネレーター
+# ブログジェネレーター
 
 [English](README.md) | [简体中文](README_zh-CN.md) | [한국어](README_ko.md)
 
 ## 概要
 
-Obsidian ブログジェネレーターは、Obsidianのノートを構造化されたブログ記事に簡単に変換できる強力なプラグインです。OpenAIの言語モデルを使用してコンテンツを最適化し、複数言語での出力をサポートし、ノート内の画像も処理できます。
+ブログジェネレーターは、Obsidianのノートを構造化されたブログ記事に簡単に変換できる強力なプラグインです。OpenAIの言語モデルを使用してコンテンツを最適化し、複数言語での出力をサポートし、ノート内の画像も処理できます。
 
 ## 特徴
 
@@ -106,7 +106,7 @@ yarn dev
   {
     "id": "obsidian-blog-generator",
     "name": "Blog Generator",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "minAppVersion": "0.15.0",
     "description": "Generate blog posts from your notes using OpenAI",
     "author": "あなたの名前",
