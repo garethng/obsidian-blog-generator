@@ -1,7 +1,6 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, WorkspaceLeaf, TFile, TFolder } from 'obsidian';
 import OpenAI from 'openai';
 import { translations, Translations } from './i18n';
-import * as path from 'path';
 
 interface BlogGeneratorSettings {
     apiKey: string;
