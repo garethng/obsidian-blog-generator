@@ -32,7 +32,7 @@ export interface Translations {
         API_KEY_REQUIRED: string;
         IMAGE_NOT_FOUND: string;
         IMAGE_PROCESSING_ERROR: string;
-        
+        URL_INVALID: string;
         // Console messages
         FOUND_IMAGES: string;
         CALLING_API: string;
@@ -76,7 +76,8 @@ export const translations: Translations = {
         API_KEY_REQUIRED: "Please configure OpenAI API key in settings first",
         IMAGE_NOT_FOUND: "Image not found",
         IMAGE_PROCESSING_ERROR: "Error processing image",
-        
+        URL_INVALID: "Please enter a valid URL",
+
         // Console messages
         FOUND_IMAGES: "Found image references:",
         CALLING_API: "Starting OpenAI API call...",
@@ -117,6 +118,7 @@ export const translations: Translations = {
         API_KEY_REQUIRED: "请先在设置中配置 OpenAI API 密钥",
         IMAGE_NOT_FOUND: "找不到图片文件",
         IMAGE_PROCESSING_ERROR: "处理图片时出错",
+        URL_INVALID: "请输入一个有效的 URL",
         
         // Console messages
         FOUND_IMAGES: "找到图片引用：",
@@ -158,7 +160,7 @@ export const translations: Translations = {
         API_KEY_REQUIRED: "最初に設定で OpenAI API キーを設定してください",
         IMAGE_NOT_FOUND: "画像が見つかりません",
         IMAGE_PROCESSING_ERROR: "画像の処理中にエラーが発生しました",
-        
+        URL_INVALID: "有効な URL を入力してください",
         // Console messages
         FOUND_IMAGES: "画像の参照を見つけました：",
         CALLING_API: "OpenAI API を呼び出し中...",
@@ -199,7 +201,7 @@ export const translations: Translations = {
         API_KEY_REQUIRED: "먼저 설정에서 OpenAI API 키를 구성해주세요",
         IMAGE_NOT_FOUND: "이미지를 찾을 수 없습니다",
         IMAGE_PROCESSING_ERROR: "이미지 처리 중 오류 발생",
-        
+        URL_INVALID: "유효한 URL을 입력해주세요",
         // Console messages
         FOUND_IMAGES: "이미지 참조를 찾았습니다：",
         CALLING_API: "OpenAI API 호출 중...",

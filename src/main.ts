@@ -2,6 +2,8 @@ import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Set
 import OpenAI from 'openai';
 import { translations, Translations } from './i18n';
 
+declare const NODE_ENV: string
+
 interface BlogGeneratorSettings {
     apiKey: string;
     model: string;
@@ -79,7 +81,7 @@ class BlogGeneratorView extends MarkdownView {
 export default class BlogGeneratorPlugin extends Plugin {
     settings: BlogGeneratorSettings;
     apiBaseUrl: string;
-    private readonly DEBUG = process.env.NODE_ENV !== 'production';
+    private DEBUG = NODE_ENV !== 'production';
 
     private debug(...args: any[]) {
         if (this.DEBUG) {
@@ -370,7 +372,7 @@ class BlogGeneratorSettingTab extends PluginSettingTab {
                         this.plugin.settings.apiBaseUrl = value;
                         await this.plugin.saveSettings();
                     } catch (e) {
-                        new Notice('Please enter a valid URL');
+                        new Notice(this.plugin.t('URL_INVALID'));
                     }
                 }));
 

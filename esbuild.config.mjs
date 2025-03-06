@@ -42,6 +42,9 @@ const copyToDist = () => {
 };
 
 const buildOptions = {
+    define: {
+        'NODE_ENV': JSON.stringify(process.argv[2])
+    },
     banner: {
         js: banner,
     },
