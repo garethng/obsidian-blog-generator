@@ -109,7 +109,7 @@ yarn dev
   {
     "id": "obsidian-blog-generator",
     "name": "Blog Generator",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "minAppVersion": "0.15.0",
     "description": "Generate blog posts from your notes using OpenAI",
     "author": "あなたの名前",

@@ -1,4 +1,4 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, WorkspaceLeaf, TFile, TFolder } from 'obsidian';
+import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting, WorkspaceLeaf, TFile, TFolder, moment } from 'obsidian';
 import OpenAI from 'openai';
 import { translations, Translations } from './i18n';
 
@@ -7,7 +7,6 @@ interface BlogGeneratorSettings {
     model: string;
     apiBaseUrl: string;
     language: string;
-    uiLanguage: string; // UI language setting
     useCustomPrompt: boolean;
     customPrompt: string;
 }
@@ -16,10 +15,22 @@ const DEFAULT_SETTINGS: BlogGeneratorSettings = {
     apiKey: '',
     model: 'gpt-4-turbo-preview',
     apiBaseUrl: 'https://api.openai.com/v1',
-    language: 'en',
-    uiLanguage: 'en',
+    language: getCurrentLanguage(),
     useCustomPrompt: false,
     customPrompt: ''
+}
+
+function getCurrentLanguage() {
+    var currentLocale = moment.locale().toLowerCase();
+    var currentLanguage = "en"
+    if (currentLocale === 'zh-cn') {
+        currentLanguage = "zh"
+    } else if (currentLocale.startsWith('ja')) {
+        currentLanguage = "ja"
+    } else if (currentLocale.startsWith('ko')) {
+        currentLanguage = "ko"
+    }
+    return currentLanguage;
 }
 
 // View type constant
@@ -77,7 +88,8 @@ export default class BlogGeneratorPlugin extends Plugin {
     }
 
     t(key: keyof Translations['en']): string {
-        return translations[this.settings.uiLanguage][key];
+        const currentLanguage = getCurrentLanguage();
+        return translations[currentLanguage][key];
     }
 
     async onload() {
@@ -396,22 +408,6 @@ class BlogGeneratorSettingTab extends PluginSettingTab {
                 .onChange(async (value) => {
                     this.plugin.settings.language = value;
                     await this.plugin.saveSettings();
-                }));
-
-        new Setting(containerEl)
-            .setName(this.plugin.t('UI_LANGUAGE'))
-            .setDesc(this.plugin.t('UI_LANGUAGE_DESC'))
-            .addDropdown(dropdown => dropdown
-                .addOption('en', 'English')
-                .addOption('zh', '中文')
-                .addOption('ja', '日本語')
-                .addOption('ko', '한국어')
-                .setValue(this.plugin.settings.uiLanguage)
-                .onChange(async (value) => {
-                    this.plugin.settings.uiLanguage = value;
-                    await this.plugin.saveSettings();
-                    // Refresh the settings tab to show new language
-                    this.display();
                 }));
 
         const useCustomPromptSetting = new Setting(containerEl)

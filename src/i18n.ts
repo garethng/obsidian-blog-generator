@@ -23,8 +23,6 @@ export interface Translations {
         CUSTOM_PROMPT_DESC: string;
         USE_CUSTOM_PROMPT: string;
         USE_CUSTOM_PROMPT_DESC: string;
-        UI_LANGUAGE: string;
-        UI_LANGUAGE_DESC: string;
         
         // Prompts
         DEFAULT_PROMPT: string;
@@ -69,8 +67,6 @@ export const translations: Translations = {
         CUSTOM_PROMPT_DESC: "Enter your custom prompt for blog generation. Use {content} for note content and {images} for image descriptions",
         USE_CUSTOM_PROMPT: "Use custom prompt",
         USE_CUSTOM_PROMPT_DESC: "Enable to use custom prompt instead of default prompt",
-        UI_LANGUAGE: "UI language",
-        UI_LANGUAGE_DESC: "Choose the language for user interface",
         
         // Prompts
         DEFAULT_PROMPT: "Please generate a well-structured blog post based on the following note content. Maintain the main points of the original text but make it more suitable for a blog format. The output should be in English and use markdown format, excluding images and other content. Only include the blog content itself.",
@@ -112,8 +108,6 @@ export const translations: Translations = {
         CUSTOM_PROMPT_DESC: "输入自定义的博客生成提示词。使用 {content} 表示笔记内容，{images} 表示图片描述",
         USE_CUSTOM_PROMPT: "使用自定义提示词",
         USE_CUSTOM_PROMPT_DESC: "启用后将使用自定义提示词替代默认提示词",
-        UI_LANGUAGE: "界面语言",
-        UI_LANGUAGE_DESC: "选择用户界面的显示语言",
         
         // Prompts
         DEFAULT_PROMPT: "请基于以下笔记内容生成一篇结构完整、逻辑清晰的博客文章。注意保持原文的主要观点，但使其更适合博客形式。输出的博客使用markdown格式，不包含图片和其他内容，只包含博客内容本身。",
@@ -155,8 +149,6 @@ export const translations: Translations = {
         CUSTOM_PROMPT_DESC: "ブログ生成用のカスタムプロンプトを入力してください。{content}でノート内容、{images}で画像説明を表します",
         USE_CUSTOM_PROMPT: "カスタムプロンプトを使用",
         USE_CUSTOM_PROMPT_DESC: "有効にするとデフォルトプロンプトの代わりにカスタムプロンプトを使用します",
-        UI_LANGUAGE: "インターフェース言語",
-        UI_LANGUAGE_DESC: "ユーザーインターフェースの言語を選択してください",
         
         // Prompts
         DEFAULT_PROMPT: "以下のノート内容に基づいて、構造的で明確なブログ記事を生成してください。元のテキストの主要なポイントを維持しながら、ブログ形式により適した形に調整してください。出力は日本語でmarkdown形式とし、画像やその他のコンテンツは含めず、ブログ本文のみとしてください。",
@@ -198,8 +190,6 @@ export const translations: Translations = {
         CUSTOM_PROMPT_DESC: "블로그 생성을 위한 사용자 정의 프롬프트를 입력하세요. {content}는 노트 내용, {images}는 이미지 설명을 나타냅니다",
         USE_CUSTOM_PROMPT: "사용자 정의 프롬프트 사용",
         USE_CUSTOM_PROMPT_DESC: "활성화하면 기본 프롬프트 대신 사용자 정의 프롬프트를 사용합니다",
-        UI_LANGUAGE: "인터페이스 언어",
-        UI_LANGUAGE_DESC: "사용자 인터페이스 언어를 선택하세요",
         
         // Prompts
         DEFAULT_PROMPT: "다음 노트 내용을 바탕으로 구조적이고 명확한 블로그 포스트를 생성해주세요. 원문의 주요 포인트를 유지하면서 블로그 형식에 더 적합하게 만들어주세요. 출력은 한국어로 markdown 형식을 사용하며, 이미지와 기타 콘텐츠를 제외한 블로그 내용만 포함해주세요.",
